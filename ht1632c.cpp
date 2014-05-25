@@ -92,15 +92,28 @@ ht1632c::ht1632c(const uint8_t data, const uint8_t wr, const uint8_t clk, const 
   _clk.regs->odc.clr  = _clk.mask;
   _cs.regs->tris.clr = _cs.mask;
   _cs.regs->odc.clr  = _cs.mask;
+#elif defined(TEENSYDUINO) && defined(__arm__)
+  pinMode(data, OUTPUT);
+  pinMode(wr, OUTPUT);
+  pinMode(clk, OUTPUT);
+  pinMode(cs, OUTPUT);
+  _data.regs = portSetRegister(data);
+  _data.mask = digitalPinToBitMask(data);
+  _wr.regs = portSetRegister(wr);
+  _wr.mask = digitalPinToBitMask(wr);
+  _clk.regs = portSetRegister(clk);
+  _clk.mask = digitalPinToBitMask(clk);
+  _cs.regs = portSetRegister(cs);
+  _cs.mask = digitalPinToBitMask(cs);
 #endif
   _setup(number);
   clear();
 }
 
-ht1632c::ht1632c(volatile uint8_t *port, const uint8_t data, const uint8_t wr, const uint8_t clk, const uint8_t cs, const uint8_t geometry, const uint8_t number)
+ht1632c::ht1632c(volatile void *port, const uint8_t data, const uint8_t wr, const uint8_t clk, const uint8_t cs, const uint8_t geometry, const uint8_t number)
 {
 #if defined (__AVR__)
-  _port = port;
+  _port = (volatile uint8_t *)port;
 
   _data = 1 << (data & 7);
   _wr = 1 << (wr & 7);
@@ -126,6 +139,8 @@ inline void ht1632c::_set(_port_t port)
   port.dev->regs->BSRR = BIT(port.mask);
 #elif defined (__PIC32MX__)
   port.regs->lat.set = port.mask;
+#elif defined(TEENSYDUINO) && defined(__arm__)
+  *(port.regs) = port.mask;
 #endif
 }
 
@@ -135,6 +150,8 @@ inline void ht1632c::_toggle(_port_t port)
   port.dev->regs->ODR = port.dev->regs->ODR ^ BIT(port.mask);
 #elif defined (__PIC32MX__)
   port.regs->lat.inv = port.mask;
+#elif defined(TEENSYDUINO) && defined(__arm__)
+  *(port.regs + 256) = port.mask;
 #endif
 }
 
@@ -144,6 +161,8 @@ inline void ht1632c::_reset(_port_t port)
   port.dev->regs->BRR = BIT(port.mask);
 #elif defined (__PIC32MX__)
   port.regs->lat.clr = port.mask;
+#elif defined(TEENSYDUINO) && defined(__arm__)
+  *(port.regs + 128) = port.mask;
 #endif
 }
 

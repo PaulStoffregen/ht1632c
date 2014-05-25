@@ -137,6 +137,9 @@ struct _port_t {
 #elif defined (__PIC32MX__)
   volatile p32_ioport *regs;
   uint16_t mask;
+#elif defined(TEENSYDUINO) && defined(__arm__)
+  volatile uint8_t *regs;
+  uint8_t mask;
 #endif
 };
 
@@ -148,7 +151,7 @@ class ht1632c : public Print {
 
 public:
     ht1632c(const uint8_t data, const uint8_t wr, const uint8_t clk, const uint8_t cs, const uint8_t geometry, const uint8_t number);
-    ht1632c(volatile uint8_t *port, const uint8_t data, const uint8_t wr, const uint8_t clk, const uint8_t cs, const uint8_t geometry, const uint8_t number);
+    ht1632c(volatile void *port, const uint8_t data, const uint8_t wr, const uint8_t clk, const uint8_t cs, const uint8_t geometry, const uint8_t number);
 
     void pwm(uint8_t value);
     void sendframe();
