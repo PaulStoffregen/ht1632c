@@ -48,7 +48,7 @@ uint8_t ht1632c::_data;
 uint8_t ht1632c::_wr;
 uint8_t ht1632c::_clk;
 uint8_t ht1632c::_cs;
-#elif defined (__ARMEL__) || defined (__PIC32MX__)
+#else
 _port_t ht1632c::_data;
 _port_t ht1632c::_wr;
 _port_t ht1632c::_clk;
@@ -59,7 +59,7 @@ _port_t ht1632c::_cs;
 
 ht1632c::ht1632c(const uint8_t data, const uint8_t wr, const uint8_t clk, const uint8_t cs, const uint8_t geometry, const uint8_t number)
 {
-#if defined (__ARMEL__)
+#if defined (MAPLE_IDE)
   _data.dev = PIN_MAP[data].gpio_device;
   _data.mask = PIN_MAP[data].gpio_bit;
   _wr.dev = PIN_MAP[wr].gpio_device;
@@ -122,7 +122,7 @@ ht1632c::ht1632c(volatile uint8_t *port, const uint8_t data, const uint8_t wr, c
 
 inline void ht1632c::_set(_port_t port)
 {
-#if defined (__ARMEL__)
+#if defined (MAPLE_IDE)
   port.dev->regs->BSRR = BIT(port.mask);
 #elif defined (__PIC32MX__)
   port.regs->lat.set = port.mask;
@@ -131,7 +131,7 @@ inline void ht1632c::_set(_port_t port)
 
 inline void ht1632c::_toggle(_port_t port)
 {
-#if defined (__ARMEL__)
+#if defined (MAPLE_IDE)
   port.dev->regs->ODR = port.dev->regs->ODR ^ BIT(port.mask);
 #elif defined (__PIC32MX__)
   port.regs->lat.inv = port.mask;
@@ -140,7 +140,7 @@ inline void ht1632c::_toggle(_port_t port)
 
 inline void ht1632c::_reset(_port_t port)
 {
-#if defined (__ARMEL__)
+#if defined (MAPLE_IDE)
   port.dev->regs->BRR = BIT(port.mask);
 #elif defined (__PIC32MX__)
   port.regs->lat.clr = port.mask;

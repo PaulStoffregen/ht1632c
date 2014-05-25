@@ -24,7 +24,7 @@
 
 /* Leaflab Maple specific definitions */
 
-#if defined (__ARMEL__)
+#if defined(MAPLE_IDE)
 typedef unsigned char uint8_t;
 typedef unsigned int uint16_t;
 typedef unsigned char prog_uint8_t;
@@ -119,11 +119,9 @@ uint16_t inline pgm_read_word_near(uint16_t *ptr) { return (uint16_t)*ptr; }
 #define USE_NLFB 
 
 /* USE_ASM experimental feature: use assembler for low level function, faster then C for bitbanging */
-#define USE_ASM
-
 /* assembler low level functions only for AVR */
-#if defined (__ARMEL__) || defined (__PIC32MX__)
-#undef USE_ASM
+#if defined(__AVR__)
+#define USE_ASM
 #endif
 
 /* from Arduino >= 1.0 Print functions returns size_t instead of void */
@@ -133,7 +131,7 @@ uint16_t inline pgm_read_word_near(uint16_t *ptr) { return (uint16_t)*ptr; }
 
 /* Chipkit and Leaflab Maple structure for defining a port (port register address and bit mask for pin) */
 struct _port_t {
-#if defined (__ARMEL__)
+#if defined (MAPLE_IDE)
   gpio_dev *dev;
   uint8_t mask;
 #elif defined (__PIC32MX__)
@@ -220,7 +218,7 @@ private:
     static uint8_t _wr;
     static uint8_t _clk;
     static uint8_t _cs;
-#elif defined (__ARMEL__) || defined (__PIC32MX__)
+#else
     static _port_t _data;
     static _port_t _wr;
     static _port_t _clk;
