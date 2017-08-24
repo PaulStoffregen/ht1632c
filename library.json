@@ -1,0 +1,12 @@
+{
+  "name": "ht1632c",
+  "version": "1.0.0",    
+  "description": "A library that allows an Arduino to interface with the popular Holtek HT1632C LED driver",
+  "keywords": "display, led, driver",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PaulStoffregen/ht1632c.git"
+  },
+  "frameworks": "arduino",
+  "platforms": "*"
+}
