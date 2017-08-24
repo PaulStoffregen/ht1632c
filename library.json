@@ -8,5 +8,6 @@
     "url": "https://github.com/PaulStoffregen/ht1632c.git"
   },
   "frameworks": "arduino",
-  "platforms": "*"
+  "platforms": "*",
+  "license": "GPL-3.0"
 }
